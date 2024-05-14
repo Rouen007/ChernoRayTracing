@@ -1,10 +1,10 @@
 #include "Input.h"
 
-#include "Walnut/Application.h"
+#include "RayTracing/Application.h"
 
 #include <GLFW/glfw3.h>
 
-namespace Walnut {
+namespace RayTracing {
 
 	bool Input::IsKeyDown(KeyCode keycode)
 	{

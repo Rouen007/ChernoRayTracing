@@ -4,7 +4,7 @@
 
 #include "vulkan/vulkan.h"
 
-namespace Walnut {
+namespace RayTracing {
 
 	enum class ImageFormat
 	{

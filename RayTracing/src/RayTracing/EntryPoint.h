@@ -2,16 +2,16 @@
 
 #ifdef WL_PLATFORM_WINDOWS
 
-extern Walnut::Application* Walnut::CreateApplication(int argc, char** argv);
+extern RayTracing::Application* RayTracing::CreateApplication(int argc, char** argv);
 bool g_ApplicationRunning = true;
 
-namespace Walnut {
+namespace RayTracing {
 
 	int Main(int argc, char** argv)
 	{
 		while (g_ApplicationRunning)
 		{
-			Walnut::Application* app = Walnut::CreateApplication(argc, argv);
+			RayTracing::Application* app = RayTracing::CreateApplication(argc, argv);
 			app->Run();
 			delete app;
 		}
@@ -27,14 +27,14 @@ namespace Walnut {
 
 int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
 {
-	return Walnut::Main(__argc, __argv);
+	return RayTracing::Main(__argc, __argv);
 }
 
 #else
 
 int main(int argc, char** argv)
 {
-	return Walnut::Main(argc, argv);
+	return RayTracing::Main(argc, argv);
 }
 
 #endif // WL_DIST
