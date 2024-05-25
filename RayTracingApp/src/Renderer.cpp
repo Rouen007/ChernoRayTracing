@@ -1,7 +1,17 @@
 #include "Renderer.h"
 #include "RayTracing/Random.h"
 
-
+namespace Utils
+{
+	uint32_t ConvertRGBA(glm::vec4 color)
+	{
+		uint8_t r = (uint8_t)( color.r * 255);
+		uint8_t g = (uint8_t)( color.g * 255);
+		uint8_t b = (uint8_t)( color.b * 255);
+		uint8_t a = (uint8_t)( color.a * 255);
+		return (a << 24) | (b << 16) | (g << 8) | r;
+	}
+};
 
 void Renderer::OnResize(uint32_t width, uint32_t height)
 {
@@ -26,19 +36,21 @@ void Renderer::Render()
 		for (uint32_t x = 0; x < m_FinalImage->GetWidth(); ++x)
 		{
 			glm::vec2 coord = { (float)x / m_FinalImage->GetWidth(), (float)y / m_FinalImage->GetHeight() };
-			m_ImageData[x+y*m_FinalImage->GetWidth()] = PerPixel(coord);
+			coord = coord * 2.0f - 1.0f;
+			auto color = PerPixel(coord);
+			color = glm::clamp(color, glm::vec4(0.0f), glm::vec4(1.0f));
+			m_ImageData[x+y*m_FinalImage->GetWidth()] = Utils::ConvertRGBA(color);
 		}
 	m_FinalImage->SetData(m_ImageData);
 }
 
-uint32_t Renderer::PerPixel(glm::vec2 coord)
+glm::vec4 Renderer::PerPixel(glm::vec2 coord)
 {
-	coord.x = coord.x * 2 - 1;
-	coord.y = coord.y * 2 - 1;
+	//coord = coord * 2.0f - 1.0f;
 	uint8_t r = (uint8_t)(coord.x * 255.0f);
 	uint8_t g = (uint8_t)(coord.y * 255.0f);
 
-	glm::vec3 rayOrigin(0.0f, 0.0f, 2.0f);
+	glm::vec3 rayOrigin(0.0f, 0.0f, 1.0f);
 	glm::vec3 rayDirection(coord.x, coord.y, -1.0f);
 	float radius = 0.5f;
 	// x = ax+bx*t
@@ -50,11 +62,28 @@ uint32_t Renderer::PerPixel(glm::vec2 coord)
 	float c = glm::dot(rayOrigin, rayOrigin) - radius * radius;
 
 	float discriminate = b * b - 4 * a * c;
-	if (discriminate >= 0.0f)
+	if (discriminate < 0.0f)
 	{
-		return 0xffff00ff;
+		return glm::vec4(0, 0, 0, 1);
+
 	}
-	else return 0xff000000;
+	float closet = (-b - glm::sqrt(discriminate)) / (2.0f * a);
+	glm::vec3 hit = rayOrigin + rayDirection * closet;
+
+	glm::vec3 normal = glm::normalize(hit);
+
+
+	/*hit.x = std::max(0.0f, hit.x);
+	hit.y = std::max(0.0f, hit.y);
+	hit.z = std::max(0.0f, hit.z);*/
+
+	glm::vec3 lightDir(-1, -1, -1);
+	lightDir = glm::normalize(lightDir);
+
+
+	glm::vec3 shpereColor(1, 0, 0);
+	float d = glm::max(glm::dot(normal, -lightDir), 0.0f);
+
+	return glm::vec4(d* shpereColor, 1.0f);
 	
-	return 0xff000000 | (g << 8) | r;
 }
