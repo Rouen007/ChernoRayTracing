@@ -16,21 +16,29 @@ public:
 	ExampleLayer()
 		: m_Camera(45.f, 0.1f, 100.0f)
 	{
+		Material& pinkSphere = m_Scene.Materials.emplace_back();
+		pinkSphere.Albedo = glm::vec3(1.0f, 0.2f, 0.1f);
+		pinkSphere.Roughness = 0.0f;
+		Material& blueSphere = m_Scene.Materials.emplace_back();
+		blueSphere.Albedo = glm::vec3(0.2f, 1.0f, 0.1f);
+		blueSphere.Roughness = 0.1f;
+
 		{
 			Sphere sphere;
 			sphere.Position = glm::vec3(0.f, 0.f, 0.f);
-			sphere.Albedo = glm::vec3(1.0f, 0.2f, 0.1f);
-			sphere.Radius = 0.5f;
+			sphere.MaterialIndex = 0;
+			sphere.Radius = 1.0f;
 			m_Scene.Spheres.push_back(sphere);
 		}
 
 		{
 			Sphere sphere;
-			sphere.Position = glm::vec3(0.f, 0.f, 0.f);
-			sphere.Albedo = glm::vec3(0.2f, 1.0f, 0.1f);
-			sphere.Radius = 1.f;
+			sphere.Position = glm::vec3(0.f, -101.f, 0.f);
+			sphere.MaterialIndex = 1;
+			sphere.Radius = 100.f;
 			m_Scene.Spheres.push_back(sphere);
 		}
+
 	}
 	virtual void OnUpdate(float ts) override
 	{
@@ -48,16 +56,29 @@ public:
 		ImGui::End();
 
 		ImGui::Begin("Scene");
-		for (size_t i=0;i<2;++i)
+		for (size_t i = 0 ; i < m_Scene.Spheres.size(); ++i)
 		{
 			ImGui::PushID(i);
 			Sphere& sphere = m_Scene.Spheres[i];
 			ImGui::DragFloat3("Position", glm::value_ptr(sphere.Position), 0.1f);
 			ImGui::DragFloat("Radius", &sphere.Radius, 0.1f);
-			ImGui::ColorEdit3("Color", glm::value_ptr(sphere.Albedo));
+			ImGui::DragInt("Material", &sphere.MaterialIndex, 1.0f, 0.0f, (int) m_Scene.Materials.size()-1);
+			ImGui::Separator(); 
+			ImGui::PopID();
+		}
+
+		for (size_t i = 0; i < m_Scene.Materials.size(); ++i)
+		{
+			ImGui::PushID(i);
+			Material& material = m_Scene.Materials[i];
+			ImGui::ColorEdit3("Albedo", glm::value_ptr(material.Albedo));
+			ImGui::DragFloat("Roughness", &material.Roughness, 0.05f, 0.0f, 1.0f);
+			ImGui::DragFloat("Metallic", &material.Metallic, 0.05f, 0.0f, 1.0f);
 			ImGui::Separator();
 			ImGui::PopID();
 		}
+
+
 		ImGui::End();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
