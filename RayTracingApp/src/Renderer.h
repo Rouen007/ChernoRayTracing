@@ -9,12 +9,19 @@
 class Renderer
 {
 public:
+	struct Settings
+	{
+		bool Accumulate = true;
+	};
 	Renderer() = default;
 	
 	~Renderer() = default;
 	void OnResize(uint32_t width, uint32_t height);
 	void Render(const Scene& scene, const Camera& cam);
 	std::shared_ptr<RayTracing::Image> GetFinalImage() const { return m_FinalImage; }
+
+	void ResetFrameIndex() { m_FrameIndex = 1; }
+	Settings& GetSettings() { return m_Settings; }
 private:
 	struct HitPayLoad
 	{
@@ -31,6 +38,10 @@ private:
 private:
 	const Scene* m_ActiveScene;
 	const Camera* m_ActiveCam;
+	Settings m_Settings;
 	std::shared_ptr<RayTracing::Image> m_FinalImage;
 	uint32_t* m_ImageData = nullptr;
+	glm::vec4* m_AccumulationData = nullptr;
+
+	uint32_t m_FrameIndex = 1;
 };
