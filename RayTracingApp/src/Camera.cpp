@@ -39,34 +39,34 @@ void Camera::OnUpdate(float ts)
 	//Movement
 	if (Input::IsKeyDown(KeyCode::W))
 	{
-		m_Position += ts * speed * m_ForwardDirection;
+		m_Position += m_ForwardDirection * ts * speed;
 		moved = true;
 	}
 	else if (Input::IsKeyDown(KeyCode::S))
 	{
-		m_Position -= ts * speed * m_ForwardDirection;
+		m_Position -= m_ForwardDirection * ts * speed;
 		moved = true;
 	}
 
 	if (Input::IsKeyDown(KeyCode::A))
 	{
-		m_Position -= ts * speed * rightDirection;
+		m_Position -= rightDirection * ts * speed;
 		moved = true;
 	}
 	else if (Input::IsKeyDown(KeyCode::D))
 	{
-		m_Position += ts * speed * rightDirection;
+		m_Position += rightDirection * ts * speed;
 		moved = true;
 	}
 
 	if (Input::IsKeyDown(KeyCode::Q)) 
 	{
-		m_Position -= ts * speed * upDirection;
+		m_Position -= upDirection * ts * speed;
 		moved = true;
 	}
 	else if (Input::IsKeyDown(KeyCode::E))
 	{
-		m_Position += ts * speed * upDirection;
+		m_Position += upDirection * ts * speed;
 		moved = true;
 	}
 

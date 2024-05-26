@@ -26,7 +26,7 @@ private:
 	void RecalculateRayDirections();
 private:
 	float m_VerticalFOV = 45.0f, m_NearClip = 0.1f, m_FarClip=100.0f;
-	glm::vec3 m_ForwardDirection{ 0.0f, 0.0f, 0.0f };
+	glm::vec3 m_ForwardDirection{ 0.0f, 0.0f, 1.0f };
 	glm::vec3 m_Position{ 0.0f, 0.0f, 0.0f };
 	glm::vec2 m_LastMousePosition{ 0.0f, 0.0f };
 	glm::mat4 m_Projection{ 1.0f }, m_InverseProjection{ 1.0f }, m_View{ 1.0f }, m_InverseView{ 1.0f };
