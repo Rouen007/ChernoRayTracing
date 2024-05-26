@@ -16,8 +16,21 @@ public:
 	void Render(const Scene& scene, const Camera& cam);
 	std::shared_ptr<RayTracing::Image> GetFinalImage() const { return m_FinalImage; }
 private:
-	glm::vec4 TraceRay(const Scene& scene, const Ray& ray);
+	struct HitPayLoad
+	{
+		float HitDistance;
+		glm::vec3 WorldPosition;
+		glm::vec3 WorldNormal;
+		int ObjectIndex;
+	};
+	glm::vec4 PerPixel(uint32_t x, uint32_t y); // ray gen
+
+	HitPayLoad TraceRay(const Ray& ray);
+	HitPayLoad ClosestHit(const Ray& ray, float hitDistance, int objectIndex);
+	HitPayLoad Miss(const Ray& ray);
 private:
+	const Scene* m_ActiveScene;
+	const Camera* m_ActiveCam;
 	std::shared_ptr<RayTracing::Image> m_FinalImage;
 	uint32_t* m_ImageData = nullptr;
 };

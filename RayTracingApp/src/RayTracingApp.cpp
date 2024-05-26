@@ -18,7 +18,7 @@ public:
 	{
 		{
 			Sphere sphere;
-			sphere.Postion = glm::vec3(0.f, 0.f, 0.f);
+			sphere.Position = glm::vec3(0.f, 0.f, 0.f);
 			sphere.Albedo = glm::vec3(1.0f, 0.2f, 0.1f);
 			sphere.Radius = 0.5f;
 			m_Scene.Spheres.push_back(sphere);
@@ -26,7 +26,7 @@ public:
 
 		{
 			Sphere sphere;
-			sphere.Postion = glm::vec3(0.f, 0.f, 0.f);
+			sphere.Position = glm::vec3(0.f, 0.f, 0.f);
 			sphere.Albedo = glm::vec3(0.2f, 1.0f, 0.1f);
 			sphere.Radius = 1.f;
 			m_Scene.Spheres.push_back(sphere);
@@ -52,7 +52,7 @@ public:
 		{
 			ImGui::PushID(i);
 			Sphere& sphere = m_Scene.Spheres[i];
-			ImGui::DragFloat3("Position", glm::value_ptr(sphere.Postion), 0.1f);
+			ImGui::DragFloat3("Position", glm::value_ptr(sphere.Position), 0.1f);
 			ImGui::DragFloat("Radius", &sphere.Radius, 0.1f);
 			ImGui::ColorEdit3("Color", glm::value_ptr(sphere.Albedo));
 			ImGui::Separator();
