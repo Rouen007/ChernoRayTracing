@@ -36,9 +36,11 @@ private:
 	HitPayLoad ClosestHit(const Ray& ray, float hitDistance, int objectIndex);
 	HitPayLoad Miss(const Ray& ray);
 private:
-	const Scene* m_ActiveScene;
-	const Camera* m_ActiveCam;
+	const Scene* m_ActiveScene = nullptr;
+	const Camera* m_ActiveCam = nullptr;
 	Settings m_Settings;
+
+	std::vector<uint32_t> m_ImageHorizontalIter, m_ImageVerticalIter;
 	std::shared_ptr<RayTracing::Image> m_FinalImage;
 	uint32_t* m_ImageData = nullptr;
 	glm::vec4* m_AccumulationData = nullptr;
